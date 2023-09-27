@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
-use Illuminate\Http\Request;
+//use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 //use Mockery\Exception;
@@ -17,7 +17,15 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        $categories = Category::all(); // get all data in this model return collection object not array
+        $request = request();
+        $query = Category::query();
+        if($name = $request->query('name')){ //asigned and comparing
+            $query->where('name','LIKE' , "%{$name}%");
+        }
+        if($status = $request->query('status')){ //asigned and comparing
+            $query->wherestatus($status);
+        }
+        $categories = $query->paginate(1); // get all data in this model return collection object not array
         return view('Dashboard.categories.index' , compact('categories'));
     }
 
@@ -35,7 +43,7 @@ class CategoriesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
        // $request->post('name');
 //        $request->query('name'); specific for query in action
@@ -56,7 +64,6 @@ class CategoriesController extends Controller
 //            ],
 //            'status' => 'in:active,archived'
 //        ]);
-        $this->vald($request);
         $request->merge([
             'slug'=>Str::slug($request->post('name')),
         ]);
@@ -78,7 +85,7 @@ class CategoriesController extends Controller
         $category = Category::create($data);
         // PRG post redirect get
 
-        return redirect()->route('categories.index')->with('add' ,'Category Created!');
+        return redirect()->route('categories.index')->with('success' ,'Category Created!');
 
     }
 
@@ -134,7 +141,7 @@ class CategoriesController extends Controller
         if($old_image && $path){
             Storage::disk('public')->delete($old_image);
         }
-        return redirect()->route('categories.index')->with('edit' ,'Category Edited!');
+        return redirect()->route('categories.index')->with('info' ,'Category Edited!');
 
     }
 
@@ -146,18 +153,18 @@ class CategoriesController extends Controller
         $category = Category::findOrFail($id);
         $category->delete();
         if ($category->image){
-            Storage::disk('public')->delete($category->image);        }
+            Storage::disk('public')->deleteDirectory('categories/'.$category->name);        }
 
 
-        return redirect()->route('categories.index')->with('delete' ,'Category deleted!');
+        return redirect()->route('categories.index')->with('danger' ,'Category deleted!');
 
     }
-    protected function uploadImage(Request $request){
+    protected function uploadImage(CategoryRequest $request){
         if (!$request->hasFile('image')) {
             return;
         }
             $file =$request->file('image'); //uploaded file
-            $path =$file->storeAs('categories/' ,$file->getClientOriginalName(), 'public');
+            $path =$file->storeAs('categories/'.$request->name ,$file->getClientOriginalName(), 'public');
 
             return $path ;
     }
