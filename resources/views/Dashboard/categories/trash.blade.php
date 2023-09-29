@@ -1,15 +1,15 @@
 @extends('layouts.dashboard')
-@section('title_section' ,'Categories')
+@section('title_section' ,'Trashed Categories')
 @section('breadcrumb')
     @parent
     <li class="breadcrumb-item active">Categories</li>
+    <li class="breadcrumb-item active">Trash</li>
 @endsection
 @section('content')
 
 
     <div class="mb-5">
-        <a href="{{route('categories.create')}}" class="btn btn-sm btn-outline-primary mr-2">Create</a>
-        <a href="{{route('categories.trash')}}" class="btn btn-sm btn-outline-dark">Trash</a>
+        <a href="{{route('categories.index')}}" class="btn btn-sm btn-outline-primary">Back</a>
     </div>
     <x-alert type="success"/>
     <x-alert type="info"/>
@@ -32,7 +32,7 @@
             <th>Name</th>
             <th>Parent</th>
             <th>Status</th>
-            <th>Created At</th>
+            <th>Delete At</th>
             <th colspan="2"></th>
 
         </tr>
@@ -46,12 +46,18 @@
                 <td>{{$category->name}}</td>
                 <td>{{$category->parent_name}}</td>
                 <td>{{$category->status}}</td>
-                <td>{{$category->created_at}}</td>
+                <td>{{$category->deleted_at}}</td>
                 <td>
-                    <a href="{{route('categories.edit' , $category->id)}}" class="btn btn-sm btn-outline-success">Edit</a>
-                </td>
+                    <form action="{{route('categories.restore' , $category->id)}}" method="post">
+                        @csrf
+                        {{--  form method spoofing--}}
+                        @method('put')
+                        <button class="btn btn-sm btn-outline-info">Restore</button>
+
+
+                    </form>                </td>
                 <td>
-                    <form action="{{route('categories.destroy' , $category->id)}}" method="post">
+                    <form action="{{route('categories.force-delete' , $category->id)}}" method="post">
                         @csrf
                       {{--  form method spoofing--}}
                         @method('delete')

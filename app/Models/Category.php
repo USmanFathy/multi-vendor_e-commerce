@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
-    use HasFactory;
+    use HasFactory , SoftDeletes;
+
 
     protected $fillable = [ //white list
       'name',
@@ -18,17 +21,34 @@ class Category extends Model
       'slug'
     ];
 
-    public static function rules(){
-        return [
-            'name'      =>'required|string|min:3|max:255',
-            'parent_id' =>[
-                'int' , 'exists:categories,id' ,'nullable'
-            ],
-            'image'    =>[
-                'image','max:1048576','dimensions:width=150 , height=100'
-            ],
-            'status' => 'in:active,archived'
-        ];
-}
 
+//    public function ScopeActive(Builder $builder){
+//        $builder->where('status','=','active');
+//    }
+//
+//    public function ScopeStatus(Builder $builder , $status){
+//        $builder->where('status','=',$status);
+//    }
+
+    public function ScopeSearch(Builder $builder ,$filters){
+            $builder->when($filters['name'] ?? false , function ($builder , $value){
+                $builder->where('categories.name','LIKE' , "%{$value}%");
+            });
+        $builder->when($filters['status'] ?? false , function ($builder , $value){
+            $builder->where('categories.status',$value);
+        });
+//        if($filters['name'] ?? false){ //asigned and comparing
+//
+//        }
+//        if($filters['status'] ?? false){ //asigned and comparing
+//        }
+    }
+
+    public function ScopeParentName($builder){
+        $builder->leftJoin('categories as parents' , 'parents.id' , '=' ,'categories.parent_id')
+            ->select([
+                'categories.*',
+                'parents.name as parent_name'
+            ]);
+    }
 }

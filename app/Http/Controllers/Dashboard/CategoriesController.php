@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
-//use Illuminate\Http\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 //use Mockery\Exception;
@@ -17,15 +17,17 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        $request = request();
-        $query = Category::query();
-        if($name = $request->query('name')){ //asigned and comparing
-            $query->where('name','LIKE' , "%{$name}%");
-        }
-        if($status = $request->query('status')){ //asigned and comparing
-            $query->wherestatus($status);
-        }
-        $categories = $query->paginate(1); // get all data in this model return collection object not array
+        $request    = request();
+        $categories = Category::parentname()
+            ->search($request->query())
+            ->paginate();
+//        $name = $request->query('name');
+//        $status = $request->query('status');
+//        $query->search($name , $status);
+//        $categories = $query->paginate(); // get all data in this model return collection object not array
+
+//        $categories = Category::active()->paginate();
+//        $categories = Category::status('archived')->paginate();
         return view('Dashboard.categories.index' , compact('categories'));
     }
 
@@ -148,18 +150,16 @@ class CategoriesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Category $category)
     {
-        $category = Category::findOrFail($id);
         $category->delete();
-        if ($category->image){
-            Storage::disk('public')->deleteDirectory('categories/'.$category->name);        }
 
 
         return redirect()->route('categories.index')->with('danger' ,'Category deleted!');
 
     }
-    protected function uploadImage(CategoryRequest $request){
+    protected function uploadImage(CategoryRequest $request)
+    {
         if (!$request->hasFile('image')) {
             return;
         }
@@ -169,6 +169,31 @@ class CategoriesController extends Controller
             return $path ;
     }
 
+    public function trash()
+    {
+        $request = request();
+        $categories = Category::onlyTrashed()->search($request->query())->paginate();
+        return view('Dashboard.categories.trash' , compact('categories'));
+
+    }
+    public function restore(Request $request,$id)
+    {
+        $category= Category::onlyTrashed()->findOrFail($id);
+        $category->restore($id);
+        return redirect()->route('categories.trash')
+            ->with('success' , 'category restored!');
+    }
+
+    public function force_delete($id)
+    {
+        $category = Category::onlyTrashed()->findOrFail($id);
+        $category->forceDelete($id);
+                if ($category->image){
+            Storage::disk('public')->deleteDirectory('categories/'.$category->name);        }
+
+        return redirect()->route('categories.trash')
+            ->with('danger' , 'category deleted forever!');
+    }
 
 
 
