@@ -44,11 +44,29 @@ class Category extends Model
 //        }
     }
 
-    public function ScopeParentName($builder){
+    public function ScopeParentName($builder)
+    {
         $builder->leftJoin('categories as parents' , 'parents.id' , '=' ,'categories.parent_id')
             ->select([
                 'categories.*',
                 'parents.name as parent_name'
             ]);
     }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'category_id');
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo(Category::class , 'parent_id', 'id')->withDefault([
+            'name' => 'Main Category'
+        ]);
+    }
+    public function childern()
+    {
+        return $this->hasMany(Category::class, 'category_id' ,'id');
+    }
+
 }

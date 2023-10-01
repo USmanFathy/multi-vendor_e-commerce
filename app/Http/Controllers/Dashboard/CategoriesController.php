@@ -18,7 +18,15 @@ class CategoriesController extends Controller
     public function index()
     {
         $request    = request();
-        $categories = Category::parentname()
+        $categories = Category::with(['parent'])
+//        parentname()
+//            ->select('categories.*')
+//            ->selectRaw('(SELECT COUNT(*)  FROM products WHERE category_id = categories.id) as products_count')
+            ->withCount([
+                "products" => function($query){
+                $query->where('status' , 'active');
+                }
+            ])
             ->search($request->query())
             ->paginate();
 //        $name = $request->query('name');
@@ -94,8 +102,9 @@ class CategoriesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Category $category)
     {
+        return view('Dashboard.categories.show', compact('category'));
     }
 
     /**
