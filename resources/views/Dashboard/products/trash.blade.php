@@ -1,15 +1,15 @@
 @extends('layouts.dashboard')
-@section('title_section' ,'Trashed Categories')
+@section('title_section' ,'Trashed Product')
 @section('breadcrumb')
     @parent
-    <li class="breadcrumb-item active">Categories</li>
+    <li class="breadcrumb-item active">Product</li>
     <li class="breadcrumb-item active">Trash</li>
 @endsection
 @section('content')
 
 
     <div class="mb-5">
-        <a href="{{route('categories.index')}}" class="btn btn-sm btn-outline-primary">Back</a>
+        <a href="{{route('products.index')}}" class="btn btn-sm btn-outline-primary">Back</a>
     </div>
     <x-alert type="success"/>
     <x-alert type="info"/>
@@ -21,6 +21,8 @@
             <option value="">All</option>
             <option value="active" @selected(request('status')== 'active')>Active</option>
             <option value="archived" @selected(request('status')== 'archived')>Archived</option>
+            <option value="draft" @selected(request('status')== 'draft')>Draft</option>
+
         </select>
         <button class="btn btn-dark mx-2">Filter</button>
     </form>
@@ -39,16 +41,16 @@
         </thead>
         <tbody>
 
-        @forelse($categories as $category)
+        @forelse($products as $product)
             <tr>
-                <td><img height="50" src="{{asset('storage/'.$category->image)}}"></td>
-                <td>{{$category->id}}</td>
-                <td>{{$category->name}}</td>
-                <td>{{$category->parent_name}}</td>
-                <td>{{$category->status}}</td>
-                <td>{{$category->deleted_at}}</td>
+                <td><img height="50" src="{{asset('storage/'.$product->image)}}"></td>
+                <td>{{$product->id}}</td>
+                <td>{{$product->name}}</td>
+                <td>{{$product->parent_name}}</td>
+                <td>{{$product->status}}</td>
+                <td>{{$product->deleted_at}}</td>
                 <td>
-                    <form action="{{route('categories.restore' , $category->id)}}" method="post">
+                    <form action="{{route('categories.restore' , $product->id)}}" method="post">
                         @csrf
                         {{--  form method spoofing--}}
                         @method('put')
@@ -57,7 +59,7 @@
 
                     </form>                </td>
                 <td>
-                    <form action="{{route('categories.force-delete' , $category->id)}}" method="post">
+                    <form action="{{route('categories.force-delete' , $product->id)}}" method="post">
                         @csrf
                       {{--  form method spoofing--}}
                         @method('delete')

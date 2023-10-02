@@ -1,6 +1,7 @@
 @props([
-        'type'=>'radio' , 'name' , 'options', 'checked'
+        'type'=>'radio' , 'name' , 'options', 'checked' ,'label'=>false
 ])
+<x-form.label for="description">{{$label}}</x-form.label>
 
 @foreach($options as $value =>$text)
     <div class="form-check">

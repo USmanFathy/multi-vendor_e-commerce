@@ -9,7 +9,7 @@
 
     <div class="mb-5">
         <a href="{{route('products.create')}}" class="btn btn-sm btn-outline-primary mr-2">Create</a>
-{{--        <a href="{{route('products.trash')}}" class="btn btn-sm btn-outline-dark">Trash</a>--}}
+        <a href="{{route('products.trash')}}" class="btn btn-sm btn-outline-dark">Trash</a>
     </div>
     <x-alert type="success"/>
     <x-alert type="info"/>
@@ -21,6 +21,8 @@
             <option value="">All</option>
             <option value="active" @selected(request('status')== 'active')>Active</option>
             <option value="archived" @selected(request('status')== 'archived')>Archived</option>
+            <option value="draft" @selected(request('status')== 'draft')>Draft</option>
+
         </select>
         <button class="btn btn-dark mx-2">Filter</button>
     </form>
@@ -46,7 +48,7 @@
                 <td><img height="50" src="{{asset('storage/'.$product->image)}}"></td>
                 <td>{{$product->id}}</td>
                 <td>{{$product->name}}</td>
-                <td>{{$product->category->name}}</td>
+                <td>{{$product->category->name ?? ""}}</td>
                 <td>{{$product->store->name}}</td>
                 <td>{{$product->price}}</td>
                 <td>{{$product->status}}</td>

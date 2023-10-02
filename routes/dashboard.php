@@ -3,6 +3,7 @@
 use App\Http\Controllers\Dashboard\CategoriesController;
 use App\Http\Controllers\Dashboard\DashboardConroller;
 use App\Http\Controllers\Dashboard\ProductController;
+use App\Http\Controllers\Dashboard\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -19,6 +20,12 @@ Route::group([
     ///////////////////////////////////////////////////////////////////////////////////
 
     ///////////////////////////////////Products////////////////////////////////////////
+    Route::get('/products/trash' , [CategoriesController::class , 'trash'])->name('products.trash');
+    Route::put('/products/{category}/restore' , [CategoriesController::class , 'restore'])->name('products.restore');
+    Route::delete('/products/{category}/force-delete' , [CategoriesController::class , 'force_delete'])->name('products.force-delete');
     Route::resource('products' , ProductController::class);
+    /////////////////////////////////Profile /////////////////////////////////////////
+    Route::get('/profile' ,[ProfileController::class ,'edit'])->name('dashboard.profile.edit');
+    Route::patch('/profile' ,[ProfileController::class ,'update'])->name('dashboard.profile.update');
 
 });

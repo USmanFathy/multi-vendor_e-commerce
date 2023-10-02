@@ -1,6 +1,7 @@
 @props([
-        'type'=>'text' , 'name' , 'value'=>false
+        'type'=>'text' , 'name' , 'value'=>false ,'label'=>false
 ])
+<x-form.label for="description">{{$label}}</x-form.label>
 
 <input
     type="{{$type }}"
