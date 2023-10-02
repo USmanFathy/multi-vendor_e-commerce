@@ -49,7 +49,7 @@ class ProductController extends Controller
                 'int' , 'exists:categories,id' ,'nullable'
             ],
             'image'    =>[
-                'image','max:1048576','dimensions:width=150 , height=100'
+                'image','max:1048576','dimensions:min_width=150 , min_height=100'
             ],
             'status' => 'in:active,archived,draft'
         ]);
@@ -63,6 +63,28 @@ class ProductController extends Controller
             $data['image'] = $path;
         }
         $product = Product::create($data);
+        $tags = json_decode($request->post('tags'));
+        if ($tags){
+            $saved_tags = Tag::all();
+            foreach ($tags as $t_name)
+            {
+                $slug = Str::slug($t_name->value);
+                $tag = $saved_tags->where('slug' , $slug)->first();
+                if(!$tag){
+                    $tag = Tag::create([
+                        'name' => $t_name->value ,
+                        'slug' => $slug
+                    ]);
+
+                }
+                $tags_id[] = $tag->id;
+            }
+
+            $product->tags()->sync($tags_id);
+        }
+
+
+
         return redirect()->route('products.index')->with('success' , 'Product Created!');
 
     }
@@ -97,7 +119,7 @@ class ProductController extends Controller
                 'int' , 'exists:categories,id' ,'nullable'
             ],
             'image'    =>[
-                'image','max:1048576','dimensions:width=150 , height=100'
+                'image','max:1048576','dimensions:min_width=150 , min_height=100'
             ],
             'status' => 'in:active,archived,draft'
         ]);
@@ -116,22 +138,25 @@ class ProductController extends Controller
         $tags = json_decode($request->post('tags'));
 
 
-        $saved_tags = Tag::all();
-        foreach ($tags as $t_name)
-        {
-            $slug = Str::slug($t_name->value);
-            $tag = $saved_tags->where('slug' , $slug)->first();
-            if(!$tag){
-                $tag = Tag::create([
-                    'name' => $t_name->value ,
-                    'slug' => $slug
-                ]);
+        if ($tags){
+            $saved_tags = Tag::all();
+            foreach ($tags as $t_name)
+            {
+                $slug = Str::slug($t_name->value);
+                $tag = $saved_tags->where('slug' , $slug)->first();
+                if(!$tag){
+                    $tag = Tag::create([
+                        'name' => $t_name->value ,
+                        'slug' => $slug
+                    ]);
 
+                }
+                $tags_id[] = $tag->id;
             }
-            $tags_id[] = $tag->id;
+
+            $product->tags()->sync($tags_id);
         }
 
-        $product->tags()->sync($tags_id);
 
         if($old_image && $path){
             Storage::disk('public')->delete($old_image);

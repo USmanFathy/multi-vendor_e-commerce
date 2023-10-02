@@ -46,4 +46,9 @@ class Product extends Model
         $builder->when($filters['status'] ?? false , function ($builder , $value){
             $builder->where('products.status',$value);
         });}
+
+    public function ScopeActive(Builder $builder)
+    {
+        $builder->where('status' , '=','active');
+    }
 }
