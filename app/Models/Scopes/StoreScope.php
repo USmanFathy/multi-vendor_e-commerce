@@ -14,9 +14,12 @@ class StoreScope implements Scope
     public function apply(Builder $builder, Model $model): void
     {
         $user = auth()->user();
-        $store_id = auth()->user()->store_id;
-        if ($user && $store_id){
-            $builder->where('store_id' , $store_id);
-        }
+       if ($user)
+       {
+           $store_id = auth()->user()->store_id;
+           if ($user && $store_id){
+               $builder->where('store_id' , $store_id);
+           }
+       }
     }
 }

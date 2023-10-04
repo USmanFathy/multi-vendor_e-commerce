@@ -45,12 +45,12 @@
 
         @forelse($products as $product)
             <tr>
-                <td><img height="50" src="{{asset('storage/'.$product->image)}}"></td>
+                <td><img height="50" src="{{$product->image_url}}"></td>
                 <td>{{$product->id}}</td>
                 <td>{{$product->name}}</td>
                 <td>{{$product->category->name ?? ""}}</td>
                 <td>{{$product->store->name}}</td>
-                <td>{{$product->price}}</td>
+                <td>{{Currency::format($product->price)}}</td>
                 <td>{{$product->status}}</td>
                 <td>{{$product->created_at}}</td>
                 <td>
