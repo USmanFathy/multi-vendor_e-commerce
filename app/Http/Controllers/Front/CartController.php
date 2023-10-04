@@ -70,7 +70,7 @@ class CartController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,CartRepository $cart)
+    public function update(Request $request)
     {
         $request->validate([
             'product_id' =>['required' , 'int' ,'exists:products,id'],
@@ -78,14 +78,14 @@ class CartController extends Controller
         ]);
         $product = Product::findOrFail($request->post('product_id'));
 //        $repository = App::make('cart');
-        $cart->update($product , $request->post('quantity'));
+        $this->cart->update($product , $request->post('quantity'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CartRepository $cart,string $id)
+    public function destroy(string $id)
     {
-        $cart->delete($id);
+        $this->cart->delete($id);
     }
 }

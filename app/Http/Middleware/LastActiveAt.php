@@ -20,7 +20,7 @@ class LastActiveAt
         if ($user)
         {
             $user->forceFill([
-                'last_active_at' => Carbon::now(),
+                'last_active_at' => null,
             ])->save();
         }
         return $next($request);
