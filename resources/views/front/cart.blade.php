@@ -48,7 +48,7 @@
                 <!-- End Cart List Title -->
                 @foreach($cart->get() as $item)
                 <!-- Cart Single List list -->
-                <div class="cart-single-list">
+                <div class="cart-single-list" id="{{$item->id}}">
                     <div class="row align-items-center">
                         <div class="col-lg-1 col-md-1 col-12">
                             <a href="{{route('front.products.show' , $item->product->slug)}}"><img src="{{$item->product->image_url}}" alt="#"></a>
@@ -63,7 +63,7 @@
                         </div>
                         <div class="col-lg-2 col-md-2 col-12">
                             <div class="count-input">
-                                <input class="form-control" value='{{$item->quantity}}' >
+                                <input class="form-control item-quantity" data-id="{{$item->id}}" value='{{$item->quantity}}'>
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-2 col-12">
@@ -75,7 +75,7 @@
                             @endif
                         </div>
                         <div class="col-lg-1 col-md-2 col-12">
-                            <a class="remove-item" href="javascript:void(0)"><i class="lni lni-close"></i></a>
+                            <a class="remove-item" data-id="{{$item->id}}" href="javascript:void(0)"><i class="lni lni-close"></i></a>
                         </div>
                     </div>
                 </div>
@@ -122,5 +122,14 @@
             </div>
         </div>
     </div>
+
+    @push('js')
+        <script>
+            const  csrf_token ="{{ csrf_token() }}"
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="{{Vite::asset('resources/js/cart.js')}}"></script>
+
+    @endpush
 
 </x-front-layout>

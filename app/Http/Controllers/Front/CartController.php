@@ -49,7 +49,11 @@ class CartController extends Controller
         $this->cart->add($product , $request->post('quantity'));
 
 
-
+//        if ($request->exceptsJson()){
+//                return  response()->json([
+//                    'message' =>'product added to cart'
+//                ]);
+//        }
         return redirect()->route('cart.index')->with('success' , 'Added To Cart');
     }
 
@@ -72,15 +76,16 @@ class CartController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(Request $request ,$id)
     {
         $request->validate([
-            'product_id' =>['required' , 'int' ,'exists:products,id'],
-            'quantity'   => ['nullable' , 'int' ,'min:1'],
+//            'product_id' =>['required' , 'int' ,'exists:products,id'],
+            'quantity'   => ['required' , 'int' ,'min:1'],
         ]);
-        $product = Product::findOrFail($request->post('product_id'));
+//        $product = Product::findOrFail($request->post('product_id'));
 //        $repository = App::make('cart');
-        $this->cart->update($product , $request->post('quantity'));
+//        dd($id);
+        $this->cart->update($id , $request->post('quantity'));
     }
 
     /**

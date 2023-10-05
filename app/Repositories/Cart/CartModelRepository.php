@@ -28,7 +28,7 @@ class CartModelRepository implements CartRepository
 
     public function add(Product $product , $quantity = 1)
     {
-        $item = Cart::where('product_id',$product->id)->firstOrCreate();
+        $item = Cart::where('product_id',$product->id)->first();
 
 //        dd($item);
     if(!$item){
@@ -38,17 +38,10 @@ class CartModelRepository implements CartRepository
                 'quantity' =>$quantity,
             ]);
             $this->get()->push($cart);
+            return $cart;
         }
-    if ($item){
+
         return $item->increment('quantity',$quantity);
-
-    }
-
-
-
-
-
-
 
 
     }
@@ -56,7 +49,6 @@ class CartModelRepository implements CartRepository
     public function update($id, $quantity)
     {
         Cart::where('id' , $id)
-            ->where('cookie_id' , $this->getCookieId())
             ->update([
                 'quantity' =>$quantity
             ]);
