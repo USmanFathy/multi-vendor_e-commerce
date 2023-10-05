@@ -28,10 +28,10 @@ class CartModelRepository implements CartRepository
 
     public function add(Product $product , $quantity = 1)
     {
-        $item = Cart::query()->first();
+        $item = Cart::where('product_id',$product->id)->firstOrCreate();
 
 //        dd($item);
-        if(!$item){
+    if(!$item){
             $cart =Cart::create([
                 'user_id' => auth()->id(),
                 'product_id' => $product->id,
@@ -39,8 +39,17 @@ class CartModelRepository implements CartRepository
             ]);
             $this->get()->push($cart);
         }
+    if ($item){
+        return $item->increment('quantity',$quantity);
 
-        return $item->increment('quantity' , $quantity);
+    }
+
+
+
+
+
+
+
 
     }
 

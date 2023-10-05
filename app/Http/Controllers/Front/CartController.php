@@ -48,6 +48,8 @@ class CartController extends Controller
 //        $repository = App::make('cart');
         $this->cart->add($product , $request->post('quantity'));
 
+
+
         return redirect()->route('cart.index')->with('success' , 'Added To Cart');
     }
 
