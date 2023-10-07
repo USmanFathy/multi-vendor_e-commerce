@@ -1,5 +1,5 @@
 @props([
-        'type'=>'select' , 'name' , 'options', 'selected' , 'label'
+        'type'=>'select' , 'name' , 'options', 'selected' , 'label'=>false
 ])
 <x-form.label for="description">{{$label}}</x-form.label>
 

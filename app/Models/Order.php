@@ -31,9 +31,27 @@ class Order extends Model
             'product_id',
             'id',
             'id'
-        );
+        )
+            ->using(OrderItem::class)
+        ->withPivot([
+            'product_name' ,'price','quantity','options',
+        ])
+            ;
     }
 
+    public function addresses ()
+    {
+        return $this->hasMany(OrderAddress::class);
+    }
+
+    public function billingAddreses()
+    {
+        return $this->hasOne(OrderAddress::class ,'order_id' ,'id' )->where('type','=','billing');
+    }
+    public function shippingAddreses()
+    {
+        return $this->hasOne(OrderAddress::class ,'order_id' ,'id' )->where('type','=','shipping');
+    }
     protected static function booted()
     {
         static::creating(function (Order $order){

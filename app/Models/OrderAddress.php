@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class OrderAddress extends Model
 {
     use HasFactory;
+
+    public $timestamps = false;
+    protected $fillable = ['order_id' ,'type' ,'first_name' ,'last_name' ,'phone_number' ,'email'
+    ,'street_address' , 'city' ,'postal_code' ,'state' ,'country'];
 }
