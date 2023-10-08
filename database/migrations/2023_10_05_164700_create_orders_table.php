@@ -20,6 +20,11 @@ return new class extends Migration
             $table->enum('status' ,['pending' ,'processing' ,'delivering' ,'completed'])->default('pending');
             $table->enum('payment_status' ,['pending' ,'paid' ,'failed' ,'cancelled' ,'refunded'])
             ->default('pending');
+            $table->float('shipping')->default(0);
+            $table->float('tax')->default(0);
+            $table->float('discount')->default(0);
+            $table->float('total')->default(0);
+
             $table->timestamps();
         });
     }
