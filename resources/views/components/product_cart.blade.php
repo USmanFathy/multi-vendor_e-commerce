@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="product-info">
-        <span class="category">{{$product->category->name}}</span>
+        <span class="category">{{$product->category->name ?? ""}}</span>
         <h4 class="title">
             <a href="{{route('front.products.show' , $product->slug)}}">{{$product->name}}</a>
         </h4>

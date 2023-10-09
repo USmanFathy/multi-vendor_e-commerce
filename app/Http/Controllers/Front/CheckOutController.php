@@ -26,7 +26,16 @@ class CheckOutController extends Controller
 
     public function store(Request $request ,CartRepository $cart)
     {
-        $request->validate([]);
+        $request->validate([
+            'address.billing.first_name' => ['required'],
+            'address.billing.last_name' => ['required'],
+            'address.billing.email' => ['required'],
+            'address.billing.phone_number' => ['required'],
+            'address.billing.city' => ['required'],
+//            'address.billing.*' => ['string'],
+
+
+        ]);
         $order_store = $cart->get()->groupBy('product.store_id')->all();
 //        dd($order_store);
         DB::beginTransaction();
@@ -59,7 +68,7 @@ class CheckOutController extends Controller
             }
 
             DB::commit();
-            event(new  OrderCreated());
+            event(new  OrderCreated($order));
         }catch (Throwable $e){
             DB::rollBack();
             throw $e;
