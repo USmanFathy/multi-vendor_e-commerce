@@ -33,7 +33,7 @@ class OrderCreatedNotification extends Notification
 //            $channels[] ='vonage';
 //            return $channels;
 //        };
-        return ['mail' ];
+        return ['mail' , 'database'];
     }
 
     /**
