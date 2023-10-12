@@ -28,8 +28,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/' , [HomeController::class ,'index'])->name('home');
 /////////////////////////////////////////////////////////////////////////////////////////
-Route::get('/products' , [ProductController::class ,'index'])->name('front.products.index');
-Route::get('/products/{product:slug}' , [ProductController::class ,'show'])->name('front.products.show');
+Route::middleware(['throttle:50,1'])->group(function (){
+    Route::get('/products' , [ProductController::class ,'index'])->name('front.products.index');
+    Route::get('/products/{product:slug}' , [ProductController::class ,'show'])->name('front.products.show');
+});
 /////////////////////////////////////////////////////////////////////////////////////////
 Route::resource('cart' ,CartController::class );
 ////////////////////////////////////////////////////////////////////////////////////////

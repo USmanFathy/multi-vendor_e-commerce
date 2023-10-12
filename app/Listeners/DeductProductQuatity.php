@@ -23,13 +23,15 @@ class DeductProductQuatity
      */
     public function handle(): void
     {
+        try {
+            foreach (Cart::get() as $item){
+                Product::where('id' ,$item->product_id)
+                    ->update([
+                        'quantity' => DB::raw("quantity - {$item->quantity}"),
+                        'sales_count' => $item->quantity
+                    ]);
+            };
+        }catch (\Throwable $e){}
 
-        foreach (Cart::get() as $item){
-            Product::where('id' ,$item->product_id)
-            ->update([
-                'quantity' => DB::raw("quantity - {$item->quantity}"),
-                'sales_count' => $item->quantity
-            ]);
-        };
     }
 }
