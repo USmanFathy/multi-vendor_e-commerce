@@ -22,7 +22,7 @@
 <script>
     const userId ="{{auth()->user()->id}}"
 </script>
-<script src="{{asset('js/app.js')}}"></script>
+<script src="{{Vite::asset('resources/js/app.js')}}"></script>
 
 </body>
 </html>
