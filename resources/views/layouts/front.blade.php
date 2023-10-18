@@ -79,7 +79,7 @@
                 <div class="col-lg-4 col-md-4 col-12">
                     <div class="top-middle">
                         <ul class="useful-links">
-                            <li><a href="index.html">Home</a></li>
+                            <li><a href="{{route('home')}}">Home</a></li>
                             <li><a href="about-us.html">About Us</a></li>
                             <li><a href="contact.html">Contact Us</a></li>
                         </ul>
@@ -89,15 +89,30 @@
                     <div class="top-end">
                         <div class="user">
                             <i class="lni lni-user"></i>
-                            Hello
+                            @auth
+                                {{auth()->user()->name}}
+                            @else
+                                hello
+                            @endauth
                         </div>
                         <ul class="user-login">
-                            <li>
-                                <a href="login.html">Sign In</a>
-                            </li>
-                            <li>
-                                <a href="register.html">Register</a>
-                            </li>
+
+                            @auth
+                                <li>
+                                    <form action="{{route('logout')}}" method="post">
+                                        @csrf
+
+                                        <button type="submit" class="btn btn-outline-primary">logout</button>
+                                    </form>
+                                </li>
+                            @else
+                                <li>
+                                    <a href="{{route('login')}}">Sign In</a>
+                                </li>
+                                <li>
+                                    <a href="{{route('register')}}">Register</a>
+                                </li>
+                            @endauth
                         </ul>
                     </div>
                 </div>

@@ -213,14 +213,14 @@
             </div>
             <div class="row">
                 @foreach($products as $product)
-                <div class="col-lg-3 col-md-6 col-12">
-                    <!-- Start Single Product -->
+                    <div class="col-lg-3 col-md-6 col-12">
+                        <!-- Start Single Product -->
 
                         <x-product_cart :product="$product"/>
 
-                </div>
+                    </div>
                 @endforeach
-                    <!-- End Single Product -->
+                <!-- End Single Product -->
 
 
             </div>
