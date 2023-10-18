@@ -99,10 +99,10 @@
 
                             @auth
                                 <li>
-                                    <form action="{{route('logout')}}" method="post">
-                                        @csrf
+                                    <a href="{{route('login')}}" onclick="event.preventDefault() ;document.getElementById('logout').submit()">Sign In</a>
 
-                                        <button type="submit" class="btn btn-outline-primary">logout</button>
+                                    <form action="{{route('logout')}}" id="logout" method="post" style="display: none">
+                                        @csrf
                                     </form>
                                 </li>
                             @else
