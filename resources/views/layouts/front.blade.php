@@ -99,7 +99,7 @@
 
                             @auth
                                 <li>
-                                    <a href="{{route('login')}}" onclick="event.preventDefault() ;document.getElementById('logout').submit()">Sign Ogut</a>
+                                    <a href="{{route('login')}}" onclick="event.preventDefault() ;document.getElementById('logout').submit()">Sign Out</a>
 
                                     <form action="{{route('logout')}}" id="logout" method="post" style="display: none">
                                         @csrf
