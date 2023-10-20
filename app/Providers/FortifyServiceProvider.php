@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Actions\Fortify\CreateNewUser;
+use App\Actions\Fortify\CustomLogin;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Laravel\Fortify\Contracts\LoginResponse;
 use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
@@ -29,6 +31,17 @@ class FortifyServiceProvider extends ServiceProvider
                 'fortify.prefix' => 'admin'
             ]);
         }
+
+        $this->app->instance(LoginResponse::class , new class implements LoginResponse{
+            public function toResponse($request)
+            {
+                if ($request->user('admin')){
+                    return redirect()->intended('admin/dashboard');
+                }
+
+                return redirect()->intended('/');
+            }
+        });
     }
 
     /**
@@ -63,8 +76,11 @@ class FortifyServiceProvider extends ServiceProvider
 
         if (Config::get('fortify.guard' ) == 'web') {
             Fortify::viewPrefix('front.auth.');
+
         }else{
             Fortify::viewPrefix('auth.');
+            Fortify::authenticateUsing([new CustomLogin , 'login']);
+
         }
     }
 }

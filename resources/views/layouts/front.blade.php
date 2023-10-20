@@ -89,7 +89,7 @@
                     <div class="top-end">
                         <div class="user">
                             <i class="lni lni-user"></i>
-                            @auth
+                            @auth()
                                 {{auth()->user()->name}}
                             @else
                                 hello
@@ -99,7 +99,7 @@
 
                             @auth
                                 <li>
-                                    <a href="{{route('login')}}" onclick="event.preventDefault() ;document.getElementById('logout').submit()">Sign In</a>
+                                    <a href="{{route('login')}}" onclick="event.preventDefault() ;document.getElementById('logout').submit()">Sign Ogut</a>
 
                                     <form action="{{route('logout')}}" id="logout" method="post" style="display: none">
                                         @csrf
