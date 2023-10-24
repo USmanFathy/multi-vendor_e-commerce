@@ -16,6 +16,10 @@ class Product extends Model
       'name' , 'category_id' , 'image' ,'price' ,'compare_price' , 'description','status'
     ];
 
+    protected $hidden =
+        [
+            'created_at' ,'updated_at' , 'deleted_at'
+        ];
     protected static function booted()
     {
        static::addGlobalScope(new StoreScope('store'));
@@ -75,5 +79,36 @@ class Product extends Model
           return 0;
         }
         return round(100 - ($this->price/ $this->compare_price *100 ) ,1 );
+    }
+
+    public function scopeFilter(Builder $builder , $filters)
+    {
+        $options = array_merge([
+            'store_id' => null,
+            'category_id'=>null,
+            'tag_id'=>[],
+            'status'=>'active'
+        ],$filters);
+        $builder->when($options['status'] , function ($builder ,$value){
+            $builder->where('status' , $value);
+        });
+        $builder->when($options['store_id'] , function ($builder ,$value){
+            $builder->where('store_id' , $value);
+        });
+        $builder->when($options['category_id'] , function ($builder ,$value){
+            $builder->where('category_id' , $value);
+        });
+        $builder->when($options['tag_id'] , function ($builder ,$value){
+
+//            $builder->whereRaw('EXISTS (SELECT 1 FROM product_tag WHERE tag_id = ? AND product_id = products.id)' , [$value]);
+
+            $builder->whereExits(function($query)use($value){
+                $query->select(1)
+                    ->from('product_tag')
+                    ->whereRaw('product_id = products.id')
+                    ->where('tag_id' , $value);
+            });
+
+        });
     }
 }
