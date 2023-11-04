@@ -13,16 +13,26 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable =[
-      'name' , 'category_id' , 'image' ,'price' ,'compare_price' , 'description','status'
+      'name' , 'category_id' , 'image' , 'store_id','price' ,'compare_price' , 'description','status'
     ];
 
     protected $hidden =
         [
-            'created_at' ,'updated_at' , 'deleted_at'
+            'created_at' ,'updated_at' , 'deleted_at','image'
         ];
+    protected $appends =[
+        'image_url'
+    ];
     protected static function booted()
     {
        static::addGlobalScope(new StoreScope('store'));
+       static::creating(function (Product $product){
+           $product->slug = Str::slug($product->name);
+       });
+
+        static::updating(function (Product $product){
+            $product->slug = Str::slug($product->name);
+        });
     }
 
     public function category()

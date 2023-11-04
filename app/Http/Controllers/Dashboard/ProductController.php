@@ -45,9 +45,7 @@ class ProductController extends Controller
     {
         $request->validate([
             'name'      =>'required|string|min:3|max:255',
-            'parent_id' =>[
-                'int' , 'exists:categories,id' ,'nullable'
-            ],
+
             'image'    =>[
                 'image','max:1048576','dimensions:min_width=150 , min_height=100'
             ],
@@ -115,9 +113,7 @@ class ProductController extends Controller
     {
                 $request->validate([
             'name'      =>'required|string|min:3|max:255',
-            'parent_id' =>[
-                'int' , 'exists:categories,id' ,'nullable'
-            ],
+
             'image'    =>[
                 'image','max:1048576','dimensions:min_width=150 , min_height=100'
             ],
