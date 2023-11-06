@@ -40,6 +40,13 @@ class ProductsController extends Controller
             'status' => 'in:active,archived,draft',
             'compare_price' =>'nullable , gt:price'
         ]);
+        $user = $request->user();
+        if(!$user->tokenCan('products.create')){
+            return response([
+                'message'=>'Not Allowed',
+
+            ],403);
+        }
         $product = Product::create($request->all()) ;
         return Response::json($product ,201 );
     }
