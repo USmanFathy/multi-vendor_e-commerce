@@ -48,7 +48,11 @@ class Cart extends Model
         if (!$cookie_id)
         {
             $cookie_id = Str::uuid();
-            Cookie::queue('cart_id' , $cookie_id , Carbon::now()->addDays(20));
+            $current = Carbon::now();
+
+            $trialExpires = $current->addDays(30);
+            $numberOfDays = $current->diffInDays($trialExpires);
+            Cookie::queue('cart_id' , $cookie_id ,$numberOfDays);
         }
 
         return $cookie_id;

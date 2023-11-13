@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+
 use NumberFormatter;
 
 class Currency
