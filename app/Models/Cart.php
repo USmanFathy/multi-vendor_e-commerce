@@ -52,7 +52,7 @@ class Cart extends Model
 
             $trialExpires = $current->addDays(30);
             $numberOfDays = $current->diffInDays($trialExpires);
-            Cookie::queue('cart_id' , $cookie_id ,$numberOfDays);
+            Cookie::queue('cart_id' , $cookie_id ,$numberOfDaysphp);
         }
 
         return $cookie_id;

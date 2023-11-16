@@ -61,17 +61,15 @@
                                 </div>
                             </li>
                             <li>
-                                <div class="select-position">
-                                    <select id="select5">
-                                        <option value="0" selected>English</option>
-                                        <option value="1">Español</option>
-                                        <option value="2">Filipino</option>
-                                        <option value="3">Français</option>
-                                        <option value="4">العربية</option>
-                                        <option value="5">हिन्दी</option>
-                                        <option value="6">বাংলা</option>
-                                    </select>
-                                </div>
+                                <ul>
+                                    @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                                        <li>
+                                            <a rel="alternate" hreflang="{{ $localeCode }}" href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}">
+                                                {{ $properties['native'] }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
                             </li>
                         </ul>
                     </div>
@@ -79,8 +77,8 @@
                 <div class="col-lg-4 col-md-4 col-12">
                     <div class="top-middle">
                         <ul class="useful-links">
-                            <li><a href="{{route('home')}}">Home</a></li>
-                            <li><a href="about-us.html">About Us</a></li>
+                            <li><a href="{{route('home')}}">@lang('app.home')</a></li>
+                            <li><a href="about-us.html">{{__('app.about')}}</a></li>
                             <li><a href="contact.html">Contact Us</a></li>
                         </ul>
                     </div>
