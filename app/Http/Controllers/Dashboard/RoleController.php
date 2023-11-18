@@ -75,9 +75,9 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Role $role)
+    public function destroy($id)
     {
-        Role::destroy($role);
+        Role::destroy($rid);
         return redirect()->route('dashboard.roles.index');
     }
 }
