@@ -15,7 +15,7 @@ return [
         'active' => 'categories.*'
     ],
     [
-        'icon'  => 'far fa-circle nav-icon',
+        'icon'  => 'far fa-box nav-icon',
         'route' => 'products.index',
         'title' => 'Products',
         'badge' => 'New',
