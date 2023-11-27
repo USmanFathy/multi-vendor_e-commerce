@@ -1,6 +1,6 @@
 <x-front-layout title="Home">
 
-
+    <x-alert type="info"/>
     <section class="hero-area">
         <div class="container">
             <div class="row">

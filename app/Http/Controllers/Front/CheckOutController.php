@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\front;
 
 use App\Events\OrderCreated;
+use App\Exceptions\CartEmptyException;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -17,7 +18,7 @@ class CheckOutController extends Controller
     public function create(CartRepository $cart)
     {
         if ($cart->get()->count()==0){
-            return redirect()->route('home');
+            throw new CartEmptyException('Cart is Empty');
         }
         $countries = Countries::getNames('EN');
 
