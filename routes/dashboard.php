@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Dashboard\AdminController;
 use App\Http\Controllers\Dashboard\CategoriesController;
 use App\Http\Controllers\Dashboard\DashboardConroller;
 use App\Http\Controllers\Dashboard\ProductController;
 use App\Http\Controllers\Dashboard\ProfileController;
+use App\Http\Controllers\Dashboard\RoleController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -28,4 +30,7 @@ Route::group([
     Route::get('/profile' ,[ProfileController::class ,'edit'])->name('dashboard.profile.edit');
     Route::patch('/profile' ,[ProfileController::class ,'update'])->name('dashboard.profile.update');
 
+
+    Route::resource('/roles', RoleController::class);
+    Route::resource('/admins', AdminController::class);
 });

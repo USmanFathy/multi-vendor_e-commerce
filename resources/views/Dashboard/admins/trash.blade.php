@@ -1,17 +1,15 @@
 @extends('layouts.dashboard')
-@section('title_section' ,'Products')
+@section('title_section' ,'Trashed Product')
 @section('breadcrumb')
     @parent
-    <li class="breadcrumb-item active">Products</li>
+    <li class="breadcrumb-item active">Product</li>
+    <li class="breadcrumb-item active">Trash</li>
 @endsection
 @section('content')
 
 
     <div class="mb-5">
-        @can('products.create')
-        <a href="{{route('products.create')}}" class="btn btn-sm btn-outline-primary mr-2">Create</a>
-        @endcan
-        <a href="{{route('products.trash')}}" class="btn btn-sm btn-outline-dark">Trash</a>
+        <a href="{{route('products.index')}}" class="btn btn-sm btn-outline-primary">Back</a>
     </div>
     <x-alert type="success"/>
     <x-alert type="info"/>
@@ -34,11 +32,9 @@
             <th>Image</th>
             <th>Id</th>
             <th>Name</th>
-            <th>Category</th>
-            <th>store</th>
-            <th>Price</th>
-            <th>status</th>
-            <th>Created At</th>
+            <th>Parent</th>
+            <th>Status</th>
+            <th>Delete At</th>
             <th colspan="2"></th>
 
         </tr>
@@ -47,22 +43,23 @@
 
         @forelse($products as $product)
             <tr>
-                <td><img height="50" src="{{$product->image_url}}"></td>
+                <td><img height="50" src="{{asset('storage/'.$product->image)}}"></td>
                 <td>{{$product->id}}</td>
                 <td>{{$product->name}}</td>
-                <td>{{$product->category->name ?? ""}}</td>
-                <td>{{$product->store->name}}</td>
-                <td>{{Currency::format($product->price)}}</td>
+                <td>{{$product->parent_name}}</td>
                 <td>{{$product->status}}</td>
-                <td>{{$product->created_at}}</td>
-                @can('products.update')
+                <td>{{$product->deleted_at}}</td>
                 <td>
-                    <a href="{{route('products.edit' , $product->id)}}" class="btn btn-sm btn-outline-success">Edit</a>
-                </td>
-                @endcan
-                @can('$products.delete')
+                    <form action="{{route('categories.restore' , $product->id)}}" method="post">
+                        @csrf
+                        {{--  form method spoofing--}}
+                        @method('put')
+                        <button class="btn btn-sm btn-outline-info">Restore</button>
+
+
+                    </form>                </td>
                 <td>
-                    <form action="{{route('products.destroy' , $product->id)}}" method="post">
+                    <form action="{{route('categories.force-delete' , $product->id)}}" method="post">
                         @csrf
                       {{--  form method spoofing--}}
                         @method('delete')
@@ -71,11 +68,10 @@
 
                     </form>
                 </td>
-                @endcan
             </tr>
         @empty
             <tr>
-                <td colspan="7" >No products Defined .</td>
+                <td colspan="7" >No Categories Defined .</td>
             </tr>
         @endforelse
 
@@ -83,7 +79,7 @@
         </tbody>
     </table>
 
-    {{$products->withQueryString()->links()}}
+    {{$categories->withQueryString()->links()}}
 
     <!-- /.row -->
 

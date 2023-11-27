@@ -17,11 +17,24 @@ class AuthServiceProvider extends ServiceProvider
         //
     ];
 
+    public function register()
+    {
+        parent::register();
+
+        $this->app->bind('abilities' ,function (){ return include base_path('data/role.php');});
+    }
+
     /**
      * Register any authentication / authorization services.
      */
     public function boot(): void
     {
+        Gate::before(function ($user , $abilities){
+            if($user->super_admin){
+                return true;
+            }
+        });
+
 
     }
 }

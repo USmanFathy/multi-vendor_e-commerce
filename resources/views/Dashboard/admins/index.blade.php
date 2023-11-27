@@ -1,17 +1,16 @@
 @extends('layouts.dashboard')
-@section('title_section' ,'Products')
+@section('title_section' ,'Admin')
 @section('breadcrumb')
     @parent
-    <li class="breadcrumb-item active">Products</li>
+    <li class="breadcrumb-item active">Admin</li>
 @endsection
 @section('content')
 
 
     <div class="mb-5">
-        @can('products.create')
-        <a href="{{route('products.create')}}" class="btn btn-sm btn-outline-primary mr-2">Create</a>
+        @can('admins.create')
+        <a href="{{route('admins.create')}}" class="btn btn-sm btn-outline-primary mr-2">Create</a>
         @endcan
-        <a href="{{route('products.trash')}}" class="btn btn-sm btn-outline-dark">Trash</a>
     </div>
     <x-alert type="success"/>
     <x-alert type="info"/>
@@ -31,38 +30,36 @@
     <table class="table table-striped table-info table-hover">
         <thead>
         <tr>
-            <th>Image</th>
             <th>Id</th>
             <th>Name</th>
-            <th>Category</th>
-            <th>store</th>
-            <th>Price</th>
+            <th>Email</th>
+            <th>UserName</th>
+            <th>PhoneNumber</th>
             <th>status</th>
             <th>Created At</th>
-            <th colspan="2"></th>
+
 
         </tr>
         </thead>
         <tbody>
 
-        @forelse($products as $product)
+        @forelse($admins as $admin)
             <tr>
-                <td><img height="50" src="{{$product->image_url}}"></td>
-                <td>{{$product->id}}</td>
-                <td>{{$product->name}}</td>
-                <td>{{$product->category->name ?? ""}}</td>
-                <td>{{$product->store->name}}</td>
-                <td>{{Currency::format($product->price)}}</td>
-                <td>{{$product->status}}</td>
-                <td>{{$product->created_at}}</td>
-                @can('products.update')
+                <td>{{$admin->id}}</td>
+                <td>{{$admin->name}}</td>
+                <td>{{$admin->email}}</td>
+                <td>{{$admin->username}}</td>
+                <td>{{$admin->phone_number}}</td>
+                <td>{{$admin->status}}</td>
+                <td>{{$admin->created_at}}</td>
+                @can('admins.update')
                 <td>
-                    <a href="{{route('products.edit' , $product->id)}}" class="btn btn-sm btn-outline-success">Edit</a>
+                    <a href="{{route('admins.edit' , $admin->id)}}" class="btn btn-sm btn-outline-success">Edit</a>
                 </td>
                 @endcan
-                @can('$products.delete')
+                @can('$admins.delete')
                 <td>
-                    <form action="{{route('products.destroy' , $product->id)}}" method="post">
+                    <form action="{{route('admins.destroy' , $admin->id)}}" method="post">
                         @csrf
                       {{--  form method spoofing--}}
                         @method('delete')
@@ -75,7 +72,7 @@
             </tr>
         @empty
             <tr>
-                <td colspan="7" >No products Defined .</td>
+                <td colspan="7" >No admins Defined .</td>
             </tr>
         @endforelse
 
@@ -83,7 +80,7 @@
         </tbody>
     </table>
 
-    {{$products->withQueryString()->links()}}
+    {{$admins->withQueryString()->links()}}
 
     <!-- /.row -->
 

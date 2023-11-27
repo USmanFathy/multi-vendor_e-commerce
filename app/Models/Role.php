@@ -23,11 +23,11 @@ class Role extends Model
                 'name'=>$request->post('name')
             ]);
 
-            foreach ($request->post('abilities')as $ability){
+            foreach ($request->post('abilities')as $ability =>$value){
                 RoleAbilities::create([
                     'role_id'=> $role->id,
-                    'ability_id' => $ability,
-                    'type' => 'allow'
+                    'ability' => $ability,
+                    'type' => $value
                 ]);
 
             }
@@ -47,13 +47,12 @@ class Role extends Model
                 'name'=>$request->post('name')
             ]);
 
-            foreach ($request->post('abilities')as $ability){
+            foreach ($request->post('abilities')as $ability =>$value){
                 RoleAbilities::updateOrCreate([
                     'role_id'=> $this->id,
-                    'ability_id' => $ability,
-
+                    'ability' => $ability,
                 ] ,[
-                    'type' => 'allow'
+                    'type' => $value
                 ]);
 
             }
@@ -65,5 +64,9 @@ class Role extends Model
 
 
         return $this;
+    }
+    public function abilities()
+    {
+        return $this->hasMany(RoleAbilities::class);
     }
 }

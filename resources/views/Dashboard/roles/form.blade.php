@@ -1,44 +1,31 @@
 
 <div class="form-group">
-    <x-form.label for="name">Categorey Name</x-form.label>
-    <x-form.input name="name" :value="$category->name" />
+    <x-form.label for="name">Role Name</x-form.label>
+    <x-form.input name="name" :value="$role->name" />
     </div>
-    <div class="form-group">
-        <x-form.label for="parent_id">Category Parent</x-form.label>
 
-        <select name="parent_id" class="form-control form-select">
-            <option value="">Primary Category</option>
-@foreach($parents as $parent)
-    <option value="{{$parent->id}}" @selected(old('parent_id' ,$category->parent_id) ==$parent->id ) >{{$parent->name }}</option>
+<fieldset>
+    <legend>{{__('Abilities')}}</legend>
+    @foreach(app('abilities') as $ability_code => $ability_name)
+    <div class="row mb-2">
+        <div class="col-md-6">
+            {{ $ability_name}}
+        </div>
+        <div class="col-md-2">
+            <input type="radio" name="abilities[{{$ability_code}}]" value="allow" id="" @checked(($role_abilities[$ability_code]??'') == 'allow')/>
+            Allow
+        </div>
+        <div class="col-md-2">
+            <input type="radio" name="abilities[{{$ability_code}}]" value="deny" id="" @checked(($role_abilities[$ability_code]??'') == 'deny') />
+            Deny
+        </div>
+        <div class="col-md-2">
+            <input type="radio" name="abilities[{{$ability_code}}]" value="inherit" id="" @checked(($role_abilities[$ability_code]??'') == 'inherit')/>
+            Inherit
+        </div>
+    </div>
     @endforeach
-    </select>
-        @error('parent_id')
-        <div class="invalid-feedback">
-            {{$message}}
-        </div>
-        @enderror
-    </div>
-    <div class="form-group">
-        <x-form.label for="description">Description</x-form.label>
-        <x-form.textarea name="description" :value="$category->description"  />
-    </div>
-    <div class="form-group">
-        <x-form.label for="image">Image</x-form.label>
-        <x-form.input type="file" name="image" />
-        @if($category->image )
-            <img height="60" src="{{asset('storage/'.$category->image)}}">
-        @endif
-        @error('image')
-        <div class="invalid-feedback">
-            {{$message}}
-        </div>
-        @enderror
-    </div>
+</fieldset>
 <div class="form-group">
-    <x-form.label for="status">Status</x-form.label>
-
-    <x-form.checkbox  name="status" :options="['active' =>'Active' , 'archived' => 'Archived']" :checked="$category->status" />
+    <button type="submit" class="btn btn-primary">{{$button_label}}</button>
 </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">{{$button_label}}</button>
-        </div>

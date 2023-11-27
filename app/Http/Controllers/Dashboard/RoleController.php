@@ -9,12 +9,18 @@ use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->authorizeResource(Role::class);
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $roles = Role::paginte();
+        $roles = Role::paginate();
 
         return view('Dashboard.roles.index' ,['roles'=>$roles]);
     }
@@ -24,7 +30,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('Dashboard.roles.index' ,['role'=>new  Role()]);
+        return view('Dashboard.roles.create' ,['role'=>new  Role()]);
     }
 
     /**
@@ -34,11 +40,11 @@ class RoleController extends Controller
     {
         $request->validate([
             'name'=>'required',
-            'abilities'=>'require|array'
+            'abilities'=>'required|array'
         ]);
 
         $role = Role::createRoleAndAbility($request);
-        return view('Dashboard.roles.index')
+        return redirect()->route('roles.index')
             ->with('success' ,'Role Created Successfully');
     }
 
@@ -55,7 +61,8 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        return view('Dashboard.roles.update' ,['role'=>$role]);
+        $role_ability =$role->abilities()->pluck('type' , 'ability')->toArray();
+        return view('Dashboard.roles.edit' ,['role'=>$role , 'role_abilities' => $role_ability]);
     }
 
     /**
@@ -65,10 +72,12 @@ class RoleController extends Controller
     {
         $request->validate([
             'name'=>'required',
-            'abilities'=>'require|array'
+            'abilities'=>'required|array'
         ]);
 
-        return redirect()->route('dashboard.roles.index')
+        $role->updateRoleAndAbility($request);
+
+        return redirect()->route('roles.index')
             ->with('success' ,'Role Updated Successfully');
     }
 
@@ -77,7 +86,7 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        Role::destroy($rid);
-        return redirect()->route('dashboard.roles.index');
+        Role::destroy($id);
+        return redirect()->route('roles.index');
     }
 }

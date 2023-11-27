@@ -1,9 +1,9 @@
 @extends('layouts.dashboard')
-@section('title_section' ,"$category->name")
+@section('title_section' ,"$role->name")
 @section('breadcrumb')
     @parent
-    <li class="breadcrumb-item active">Categories</li>
-    <li class="breadcrumb-item active">{{$category->name}}</li>
+    <li class="breadcrumb-item active">Role</li>
+    <li class="breadcrumb-item active">{{$role->name}}</li>
 
 @endsection
 @section('content')

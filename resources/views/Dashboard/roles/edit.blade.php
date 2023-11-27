@@ -1,7 +1,8 @@
 @extends('layouts.dashboard')
-@section('title_section' ,'Edit Category')
+@section('title_section' ,'Edit Role')
 @section('breadcrumb')
     @parent
+    <li class="breadcrumb-item active"> Roles</li>
     <li class="breadcrumb-item active">Edit Role</li>
 @endsection
 @section('content')
